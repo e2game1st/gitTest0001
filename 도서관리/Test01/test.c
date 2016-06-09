@@ -5,7 +5,7 @@ int main(void)
 {
 	//< 추가
 	printf("메롱\n");
-
+	// 돈 주석주석주석주석주석주석
 	//< 주가
 	printf("ttttt");
 	
