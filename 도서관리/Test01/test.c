@@ -18,3 +18,8 @@ void moon(void)
 {
 	puts("しさしさしさし");
 }
+
+void moon2(void)
+{
+	puts("dfsdf");
+}
