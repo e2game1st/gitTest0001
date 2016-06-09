@@ -10,7 +10,7 @@ day:160418
 #include <time.h>
 #include "JUtil.h"
 
-
+#define MOON 5
 #define BLACK_BG (RED_BG & GREEN_BG & BLUE_BG)
 
 #define TRUE 1
@@ -29,37 +29,37 @@ day:160418
 #define randomize()                 srand((unsigned int)time(0))
 #define getRandomRange(_max,_min)   (random((_max-_min)+1) + _min)
 
-//< ºù°íÆÇ º¸¿©ÁÖ±â
+//< ë¹™ê³ íŒ ë³´ì—¬ì£¼ê¸°
 void display(const int(**numArr), int(**flagArr), int row, int col, int mode);
 
-//< ¼ýÀÚÃßÃâ
+//< ìˆ«ìžì¶”ì¶œ
 void initNumber(int(**numArr), int(**flagArr), int row, int col);
 
-//< ¼¯±â
+//< ì„žê¸°
 void shuffle(int(**numArr), int row, int col, int shuffleCount);
 
-//< ¹Ù²Ù±â 
+//< ë°”ê¾¸ê¸° 
 void swap(int *left, int *right);
 
-//< ¼ýÀÚ ¿ÀÇÂ
+//< ìˆ«ìž ì˜¤í”ˆ
 void openNumber(int(**numArr), int(**flagArr), int row, int col, int number);
 
-//< ºù°í È®ÀÎ
+//< ë¹™ê³  í™•ì¸
 int bingoCount(int(**flagArr), int row, int col);
 
-//< °ÔÀÓ ·çÇÁ
+//< ê²Œìž„ ë£¨í”„
 void gameLoop(int(**numArrUser), int(**flagArrUser), int(**numArrCom), int(**flagArrCom), int row, int col);
 
-//< ¼ýÀÚ ÀÔ·Â
+//< ìˆ«ìž ìž…ë ¥
 int inputNumber(void);
 
-//< Ãâ·Â
+//< ì¶œë ¥
 void output(int(**numArrUser), int(**flagArrUser), int(**numArrCom), int(**flagArrCom), int row, int col);
 
-//< µ¿ÀûÇÒ´ç
+//< ë™ì í• ë‹¹
 void* allocation(int (**numArr), int row, int col);
 
-//< ÇØÁ¦
+//< í•´ì œ
 void* freeAlloc(int (**numArr), int row, int col);
 
 int main(int argc, char *args[])
@@ -68,64 +68,64 @@ int main(int argc, char *args[])
 	int **numArrCom = NULL, **flagArrCom = NULL;
 	int row, col;
 
-	//< ½Ã°£¼³Á¤
+	//< ì‹œê°„ì„¤ì •
 	randomize();
 
 	while (TRUE)
 	{
 		system("cls");
-		printf("ÁÙ¼öÀÔ·Â:");
+		printf("ì¤„ìˆ˜ìž…ë ¥:");
 		row = inputNumber();
 		col = row;
 		if (row != col || row < 3)
 		{
-			//< ÀçÀÔ·Â
+			//< ìž¬ìž…ë ¥
 			system("cls");
-			puts("³Ê¹« ÀÛ½À´Ï´Ù");
-			puts("´Ù½ÃÀÔ·Â");
+			puts("ë„ˆë¬´ ìž‘ìŠµë‹ˆë‹¤");
+			puts("ë‹¤ì‹œìž…ë ¥");
 			system("pause");
 		}
 		else
 		{
-			//< µ¿ÀûÇÒ´ç
+			//< ë™ì í• ë‹¹
 			system("cls");
-			puts("µ¿ÀûÇÒ´ç½ÃÀÛ");
-			//< User µ¿ÀûÇÒ´ç
+			puts("ë™ì í• ë‹¹ì‹œìž‘");
+			//< User ë™ì í• ë‹¹
 			numArrUser=(int**)allocation(numArrUser, row, col);
 			flagArrUser = (int**)allocation(flagArrUser, row, col);
-			//< Com µ¿ÀûÇÒ´ç
+			//< Com ë™ì í• ë‹¹
 			numArrCom = (int**)allocation(numArrCom, row, col);
 			flagArrCom = (int**)allocation(flagArrCom, row, col);
-			puts("µ¿ÀûÇÒ´ç¿Ï·á");
+			puts("ë™ì í• ë‹¹ì™„ë£Œ");
 			break;
 		}
 	}
 	
 	system("cls");
 
-	//< ¼ýÀÚÃßÃâ
+	//< ìˆ«ìžì¶”ì¶œ
 	initNumber(numArrCom, flagArrCom, row, col);
 	shuffle(numArrCom, row, col, getRandomRange(500, 100));
 	initNumber(numArrUser, flagArrUser, row, col);
 	shuffle(numArrUser, row, col, getRandomRange(1000, 500));
 
-	//< °ÔÀÓ¹Ýº¹
+	//< ê²Œìž„ë°˜ë³µ
 	gameLoop(numArrUser, flagArrUser, numArrCom, flagArrCom, row, col);
 
-	//< µ¿ÀûÇÒ´ç ÇØÁ¦
-	//< User µ¿ÀûÇÒ´çÇØÁ¦
+	//< ë™ì í• ë‹¹ í•´ì œ
+	//< User ë™ì í• ë‹¹í•´ì œ
 	freeAlloc(numArrUser, row, col);
 	freeAlloc(flagArrUser, row, col);
-	//< Com µ¿ÀûÇÒ´çÇØÁ¦
+	//< Com ë™ì í• ë‹¹í•´ì œ
 	freeAlloc(numArrCom, row, col);
 	freeAlloc(flagArrCom, row, col);
 	return 0;
 }
 
-//< ºù°íÆÇ º¸¿©ÁÖ±â
+//< ë¹™ê³ íŒ ë³´ì—¬ì£¼ê¸°
 void display(const int(**numArr), int(**flagArr), int row, int col, int mode)
 {
-	//< ¹Ýº¹º¯¼ö
+	//< ë°˜ë³µë³€ìˆ˜
 	int i, j;
 	
 	setTextcolor(WHITE_BG);
@@ -134,7 +134,7 @@ void display(const int(**numArr), int(**flagArr), int row, int col, int mode)
 	{
 		for (j = 0; j < row; j++)
 		{
-			//< À¯Àú
+			//< ìœ ì €
 			if (mode == USER)
 			{
 				if (flagArr[i][j] == SHOW)
@@ -148,7 +148,7 @@ void display(const int(**numArr), int(**flagArr), int row, int col, int mode)
 					printf("[%4d]", numArr[i][j]);
 				}
 			}
-			//< ÄÄÇ»ÅÍ
+			//< ì»´í“¨í„°
 			else
 			{
 				if (flagArr[i][j] == HIDE)
@@ -168,13 +168,13 @@ void display(const int(**numArr), int(**flagArr), int row, int col, int mode)
 	setTextcolor(WHITE);
 }
 
-//< ¼ýÀÚÃßÃâ
+//< ìˆ«ìžì¶”ì¶œ
 void initNumber(int(**numArr), int(**flagArr), int row, int col)
 {
-	//< ¹Ýº¹º¯¼ö, ¼ýÀÚ
+	//< ë°˜ë³µë³€ìˆ˜, ìˆ«ìž
 	int i, j, number = 1;
 
-	//< ½Ã°£¼³Á¤
+	//< ì‹œê°„ì„¤ì •
 	randomize();
 
 	for (i = 0; i < col; i++)
@@ -187,18 +187,18 @@ void initNumber(int(**numArr), int(**flagArr), int row, int col)
 	}
 }
 
-//< ¼¯±â
+//< ì„žê¸°
 void shuffle(int(**numArr), int row, int col, int shuffleCount)
 {
-	//< ¹Ýº¹¿ë º¯¼ö
+	//< ë°˜ë³µìš© ë³€ìˆ˜
 	int i;
 
-	//< ÀÎµ¦½º ÃßÃâ º¯¼ö
+	//< ì¸ë±ìŠ¤ ì¶”ì¶œ ë³€ìˆ˜
 	int dest, src;
 
 	for (i = 0; i < shuffleCount; i++)
 	{
-		//< ÀÎµ¦½º
+		//< ì¸ë±ìŠ¤
 		dest = getRandomRange(row * col - 1, 0);
 		src = getRandomRange(row * col - 1, 0);
 
@@ -210,7 +210,7 @@ void shuffle(int(**numArr), int row, int col, int shuffleCount)
 	}
 }
 
-//< ¹Ù²Ù±â 
+//< ë°”ê¾¸ê¸° 
 void swap(int *left, int *right)
 {
 	int temp = *left;
@@ -218,13 +218,13 @@ void swap(int *left, int *right)
 	*right = temp;
 }
 
-//< ¼ýÀÚ ¿ÀÇÂ
+//< ìˆ«ìž ì˜¤í”ˆ
 void openNumber(int(**numArr), int(**flagArr), int row, int col, int number)
 {
-	//< ¹Ýº¹¿ë º¯¼ö
+	//< ë°˜ë³µìš© ë³€ìˆ˜
 	int i, j;
 
-	//< ¹Ýº¹
+	//< ë°˜ë³µ
 	for (i = 0; i < col; i++)
 	{
 		for (j = 0; j < row; j++)
@@ -241,7 +241,7 @@ void openNumber(int(**numArr), int(**flagArr), int row, int col, int number)
 	}
 }
 
-//< °ÔÀÓ ·çÇÁ
+//< ê²Œìž„ ë£¨í”„
 void gameLoop(int(**numArrUser), int(**flagArrUser), int(**numArrCom), int(**flagArrCom), int row, int col)
 {
 	int turn = 0, userBingo = 0, comBingo = 0, number;
@@ -253,10 +253,10 @@ void gameLoop(int(**numArrUser), int(**flagArrUser), int(**numArrCom), int(**fla
 		{
 			while (TRUE)
 			{
-				printf("ÀÔ·Â[1~%d][0:Á¾·á] : ", row*col);
+				printf("ìž…ë ¥[1~%d][0:ì¢…ë£Œ] : ", row*col);
 				number = inputNumber();
 				while (getchar() != '\n');
-				//< Á¾·áÇÃ·¡±×
+				//< ì¢…ë£Œí”Œëž˜ê·¸
 				if (number == 0){ return; }
 				openNumber(numArrUser, flagArrUser, row, col, number);
 				openNumber(numArrCom, flagArrCom, row, col, number);
@@ -265,7 +265,7 @@ void gameLoop(int(**numArrUser), int(**flagArrUser), int(**numArrCom), int(**fla
 				if (userBingo >= row)
 				{
 					system("cls");
-					puts("À¯Àú½Â¸®!!!");
+					puts("ìœ ì €ìŠ¹ë¦¬!!!");
 					system("pause");
 					return;
 				}
@@ -288,7 +288,7 @@ void gameLoop(int(**numArrUser), int(**flagArrUser), int(**numArrCom), int(**fla
 					if (comBingo >= row)
 					{
 						system("cls");
-						puts("ÄÄ½Â¸®!!!");
+						puts("ì»´ìŠ¹ë¦¬!!!");
 						system("pause");
 						return;
 					}
@@ -296,33 +296,33 @@ void gameLoop(int(**numArrUser), int(**flagArrUser), int(**numArrCom), int(**fla
 				}
 			}
 		}
-		//< È­¸éÁö¿ì±â
+		//< í™”ë©´ì§€ìš°ê¸°
 		system("cls");
 
-		//< ´Ù½Ã Ãâ·Â
+		//< ë‹¤ì‹œ ì¶œë ¥
 		output(numArrUser, flagArrUser, numArrCom, flagArrCom, row, col);
 	}
 }
 
-//< ºù°í È®ÀÎ
+//< ë¹™ê³  í™•ì¸
 int bingoCount(int(**flagArr), int row, int col)
 {
-	//< ¹Ýº¹¿ë º¯¼ö
+	//< ë°˜ë³µìš© ë³€ìˆ˜
 	int i, j;
 
-	//< ºù°í Ä«¿îÆ®
+	//< ë¹™ê³  ì¹´ìš´íŠ¸
 	int bingo = 0;
 
-	//< ÀÎµ¦½º
+	//< ì¸ë±ìŠ¤
 	int cross = 0, checkCount = 0;
 
-	//< ¹Ýº¹
+	//< ë°˜ë³µ
 	for (i = 0; i < col; i++)
 	{
 		checkCount = 0;
 		for (j = 0; j < row; j++)
 		{
-			// °¡·Î ºù°í
+			// ê°€ë¡œ ë¹™ê³ 
 			if (flagArr[i][j] == SHOW)
 			{
 				checkCount++;
@@ -334,13 +334,13 @@ int bingoCount(int(**flagArr), int row, int col)
 		}
 	}
 
-	//< ¹Ýº¹
+	//< ë°˜ë³µ
 	for (i = 0; i < col; i++)
 	{
 		checkCount = 0;
 		for (j = 0; j < row; j++)
 		{
-			//< ¼¼·Î ºù°í
+			//< ì„¸ë¡œ ë¹™ê³ 
 			if (flagArr[j][i] == SHOW)
 			{
 				checkCount++;
@@ -352,10 +352,10 @@ int bingoCount(int(**flagArr), int row, int col)
 		}
 	}
 
-	//< ¹Ýº¹
+	//< ë°˜ë³µ
 	for (i = 0; i < col; i++)
 	{
-		//< ´ë°¢¼±1
+		//< ëŒ€ê°ì„ 1
 		if (flagArr[i][i] == SHOW)
 		{
 			cross++;
@@ -367,10 +367,10 @@ int bingoCount(int(**flagArr), int row, int col)
 		bingo++;
 	}
 	cross = 0;
-	//< ¹Ýº¹
+	//< ë°˜ë³µ
 	for (i = 0; i < col; i++)
 	{
-		//< ´ë°¢¼±2
+		//< ëŒ€ê°ì„ 2
 		if (flagArr[i][(row - 1) - i] == SHOW)
 		{
 			cross++;
@@ -383,48 +383,48 @@ int bingoCount(int(**flagArr), int row, int col)
 	return bingo;
 }
 
-//< ¼ýÀÚ ÀÔ·Â
+//< ìˆ«ìž ìž…ë ¥
 int inputNumber(void)
 {
 	int number;
-	//< ÀÔ·Â, ¿¡·¯Ã³¸®
+	//< ìž…ë ¥, ì—ëŸ¬ì²˜ë¦¬
 	if (scanf_s("%d", &number) != 1)
 	{
-		puts("¿À·ù");
+		puts("ì˜¤ë¥˜");
 		system("pause");
 		while (getchar() != '\n');
 	}
 	return number;
 }
 
-//< Ãâ·Â
+//< ì¶œë ¥
 void output(int(**numArrUser), int(**flagArrUser), int(**numArrCom), int(**flagArrCom), int row, int col)
 {
 	int com = 0, user = 0;
 
 	com = bingoCount(flagArrCom, row, col);
 	setTextcolor(PINK);
-	printf("[Comºù°íÆÇ] : %d\n", com);
+	printf("[Comë¹™ê³ íŒ] : %d\n", com);
 
 	display(numArrCom, flagArrCom, row, col, COM);//USER); 
 
 	user = bingoCount(flagArrUser, row, col);
 	setTextcolor(YELLOW);
-	printf("[³»ºù°íÆÇ] : %d\n", user);
+	printf("[ë‚´ë¹™ê³ íŒ] : %d\n", user);
 
 	display(numArrUser, flagArrUser, row, col, USER);
 }
 
-//< µ¿ÀûÇÒ´ç
+//< ë™ì í• ë‹¹
 void* allocation(int(**numArr), int row, int col)
 {
-	//< ¹Ýº¹¿ë º¯¼ö
+	//< ë°˜ë³µìš© ë³€ìˆ˜
 	int i;
-	//< 2Â÷¿ø ÇÒ´ç
+	//< 2ì°¨ì› í• ë‹¹
 	if (numArr == NULL)
 	{
 		numArr = (int**)malloc(sizeof(int*) * col);
-		//< 1Â÷¿ø ÇÒ´ç
+		//< 1ì°¨ì› í• ë‹¹
 		for (i = 0; i < row; i++)
 		{
 			numArr[i] = (int*)malloc(sizeof(int) * row);
@@ -432,32 +432,32 @@ void* allocation(int(**numArr), int row, int col)
 	}
 	else
 	{
-		puts("¿À·ù");
+		puts("ì˜¤ë¥˜");
 		return NULL;
 	}
 	
 	return numArr;
 }
 
-//< ÇØÁ¦
+//< í•´ì œ
 void* freeAlloc(int(**numArr), int row, int col)
 {
-	//< ¹Ýº¹¿ë º¯¼ö
+	//< ë°˜ë³µìš© ë³€ìˆ˜
 	int i;
 	if (numArr != NULL)
 	{
-		//< 1Â÷¿ø ÇØÁ¦
+		//< 1ì°¨ì› í•´ì œ
 		for (i = 0; i < row; i++)
 		{
 			free(numArr[i]);
 		}
 
-		//< 2Â÷¿ø ÇØÁ¦
+		//< 2ì°¨ì› í•´ì œ
 		free(numArr);
 	}
 	else
 	{
-		puts("¿À·ù");
+		puts("ì˜¤ë¥˜");
 		return NULL;
 	}
 
