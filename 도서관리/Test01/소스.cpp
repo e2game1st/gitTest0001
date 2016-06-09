@@ -3,6 +3,6 @@
  void haha(void)
 {
 	//< Ãß°¡
-	printf("¸Þ·Õ\n");
+	printf("¤²¤²¤²¤²¤²\n");
 	
 }
