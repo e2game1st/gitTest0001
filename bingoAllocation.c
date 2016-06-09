@@ -1,4 +1,5 @@
 /*
+¼öÁ¤
 project:bingo(5x5)
 day:160418
 */
