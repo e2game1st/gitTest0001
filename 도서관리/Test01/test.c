@@ -11,6 +11,9 @@ int main(void)
 	
 	// 동민 추가
 	puts("호로로로로롤로로");
+
+	//< dlfjksldkfjsldkfj
+	puts("ㅁ니ㅏ어리나얼");
 	return 0;
 }
 
