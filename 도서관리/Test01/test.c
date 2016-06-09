@@ -7,3 +7,8 @@ int main(void)
 	printf("五荊\n");
 	return 0;
 }
+
+void moon(void)
+{
+	puts("しさしさしさし");
+}
